@@ -3,5 +3,7 @@ name=Quick Attribution
 description=Define the attributes for a layer first and then digitize a number of geometries with all the same attributes.
 version=1.0
 qgisMinimumVersion=2.0
+repository=https://github.com/opengisch/quick_attribution
+tracker=https://github.com/opengisch/quick_attribution/issues
 author=Matthias Kuhn/OPENGIS.ch
 email=matthias@opengis.ch
