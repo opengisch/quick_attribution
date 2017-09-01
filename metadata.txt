@@ -1,0 +1,7 @@
+[general]
+name=Quick Attribution
+description=Define the attributes for a layer first and then digitize a number of geometries with all the same attributes.
+version=1.0
+qgisMinimumVersion=2.0
+author=Matthias Kuhn/OPENGIS.ch
+email=matthias@opengis.ch
