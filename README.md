@@ -1,8 +1,10 @@
-# QGIS Template Digitizer
+# QGIS Quick Attribution Plugin
 
 When digitizing a lot of features with identical attributes, this is the way to go.
 
 It will show an attribute form in a dock widget next to the map canvas. These attributes will then be used when you digitize new features even when the feature form is suppressed.
+
+![Sample](https://github.com/opengisch/quick_attribution/raw/master/doc/sample.png)
 
 ## Configure project
 
