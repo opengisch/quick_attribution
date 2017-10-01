@@ -3,7 +3,7 @@
 # Copyright (C) 2017 OPENGIS.ch
 # -----------------------------------------------------------
 # Licensed under the terms of GNU GPL 2
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -44,7 +44,8 @@ class AttributesDock(QgsDockWidget):
         self.attributeForm = None
         self.layer = None
 
-        self.layerComboBox.setFilters(QgsMapLayerProxyModel.WritableLayer | QgsMapLayerProxyModel.VectorLayer)
+        self.layerComboBox.setFilters(
+            QgsMapLayerProxyModel.WritableLayer | QgsMapLayerProxyModel.VectorLayer)
 
     def setLayer(self, layer):
         if layer == self.layer:
@@ -55,7 +56,8 @@ class AttributesDock(QgsDockWidget):
             self.attributeForm.deleteLater()
         self.attributeForm = QgsAttributeForm(layer)
         try:
-            self.layer.updatedFields.disconnect(self.attributeForm.onUpdatedFields)
+            self.layer.updatedFields.disconnect(
+                self.attributeForm.onUpdatedFields)
         except TypeError:
             pass
         fields = self.layer.fields()
@@ -71,5 +73,6 @@ class AttributesDock(QgsDockWidget):
     def onAttributeChanged(self, attributeName, value):
         idx = self.layer.fieldNameIndex(attributeName)
         self.layer.blockSignals(True)
-        self.layer.setDefaultValueExpression(idx, QgsExpression.quotedValue(value))
+        self.layer.setDefaultValueExpression(
+            idx, QgsExpression.quotedValue(value))
         self.layer.blockSignals(False)
