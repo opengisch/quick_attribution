@@ -50,25 +50,38 @@ class AttributesDock(QgsDockWidget):
     def setLayer(self, layer):
         if layer == self.layer:
             return
+        if self.layer:
+            self.layer.destroyed.disconnect(self.onLayerRemoved)
         self.layer = layer
+        if self.layer:
+            self.layer.destroyed.connect(self.onLayerRemoved)
         self.layerComboBox.setLayer(layer)
         if self.attributeForm:
-            self.attributeForm.deleteLater()
-        self.attributeForm = QgsAttributeForm(layer)
-        try:
-            self.layer.updatedFields.disconnect(
-                self.attributeForm.onUpdatedFields)
-        except TypeError:
-            pass
-        fields = self.layer.fields()
-        self.feature = QgsFeature(fields)
-        for idx in range(self.layer.fields().count()):
-            self.feature.setAttribute(idx, layer.defaultValue(idx))
-        self.feature.setValid(True)
-        self.attributeForm.setFeature(self.feature)
-        self.attributeForm.attributeChanged.connect(self.onAttributeChanged)
-        self.formWidget.layout().addWidget(self.attributeForm)
-        self.layerChanged.emit(self.layer)
+            try:
+                self.attributeForm.deleteLater()
+            except RuntimeError:
+                # Sometimes the form has already been deleted, that's ok for us
+                pass
+        if self.layer:
+            self.attributeForm = QgsAttributeForm(layer)
+            try:
+                self.layer.updatedFields.disconnect(
+                    self.attributeForm.onUpdatedFields)
+            except TypeError:
+                pass
+            fields = self.layer.fields()
+            self.feature = QgsFeature(fields)
+            for idx in range(self.layer.fields().count()):
+                self.feature.setAttribute(idx, layer.defaultValue(idx))
+            self.feature.setValid(True)
+            self.attributeForm.setFeature(self.feature)
+            self.attributeForm.attributeChanged.connect(
+                self.onAttributeChanged)
+            self.formWidget.layout().addWidget(self.attributeForm)
+            self.layerChanged.emit(self.layer)
+
+    def onLayerRemoved(self):
+        self.setLayer(None)
 
     def onAttributeChanged(self, attributeName, value):
         idx = self.layer.fieldNameIndex(attributeName)
