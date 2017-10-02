@@ -76,6 +76,7 @@ class AttributesDock(QgsDockWidget):
             context.setVectorLayerTools(self.iface.vectorLayerTools())
             context.setFormMode(QgsAttributeEditorContext.StandaloneDialog)
             self.attributeForm = QgsAttributeForm(self.layer, QgsFeature(), context)
+            self.attributeForm.hideButtonBox()
             try:
                 self.layer.updatedFields.disconnect(
                     self.attributeForm.onUpdatedFields)
