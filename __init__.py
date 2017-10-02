@@ -25,7 +25,7 @@ class QuickAttribution:
         self.iface = iface
 
     def initGui(self):
-        self.dockWidget = AttributesDock()
+        self.dockWidget = AttributesDock(self.iface)
         self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dockWidget)
         self.iface.currentLayerChanged.connect(self.dockWidget.setLayer)
         self.dockWidget.layerChanged.connect(self.iface.setActiveLayer)

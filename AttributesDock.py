@@ -14,38 +14,47 @@ from qgis.gui import (
     QgsDockWidget,
     QgsAttributeForm,
     QgsMapLayerComboBox,
-    QgsMapLayerProxyModel
+    QgsMapLayerProxyModel,
+    QgsAttributeEditorContext
 )
 from qgis.core import (
     QgsExpression,
     QgsMapLayer,
     QgsMapLayerRegistry,
-    QgsFeature
+    QgsFeature,
+    QgsProject
 )
-from qgis.PyQt.QtWidgets import QWidget
+from qgis.PyQt.QtWidgets import (
+    QWidget,
+    QLabel
+)
 from qgis.PyQt.QtGui import QGridLayout
 from qgis.PyQt.QtCore import pyqtSignal
-
 
 class AttributesDock(QgsDockWidget):
     layerChanged = pyqtSignal(QgsMapLayer)
 
-    def __init__(self):
+    def __init__(self, iface):
         QgsDockWidget.__init__(self)
+        self.iface = iface
         self.widget = QWidget()
         self.widget.setLayout(QGridLayout())
         self.layerComboBox = QgsMapLayerComboBox()
         self.layerComboBox.layerChanged.connect(self.setLayer)
-        self.widget.layout().addWidget(self.layerComboBox)
+        self.layerTitleLabel = QLabel()
+        self.widget.layout().addWidget(self.layerTitleLabel, 0, 0, 1, 1)
+        self.widget.layout().addWidget(self.layerComboBox, 0, 1, 1, 1)
         self.formWidget = QWidget()
         self.formWidget.setLayout(QGridLayout())
-        self.widget.layout().addWidget(self.formWidget)
+        self.widget.layout().addWidget(self.formWidget, 1, 0, 1, 2)
         self.setWidget(self.widget)
         self.attributeForm = None
         self.layer = None
 
         self.layerComboBox.setFilters(
             QgsMapLayerProxyModel.WritableLayer | QgsMapLayerProxyModel.VectorLayer)
+
+        QgsProject.instance().readProject.connect(self.onProjectRead)
 
     def setLayer(self, layer):
         if layer == self.layer:
@@ -63,7 +72,10 @@ class AttributesDock(QgsDockWidget):
                 # Sometimes the form has already been deleted, that's ok for us
                 pass
         if self.layer:
-            self.attributeForm = QgsAttributeForm(layer)
+            context = QgsAttributeEditorContext()
+            context.setVectorLayerTools(self.iface.vectorLayerTools())
+            context.setFormMode(QgsAttributeEditorContext.StandaloneDialog)
+            self.attributeForm = QgsAttributeForm(self.layer, QgsFeature(), context)
             try:
                 self.layer.updatedFields.disconnect(
                     self.attributeForm.onUpdatedFields)
@@ -72,7 +84,7 @@ class AttributesDock(QgsDockWidget):
             fields = self.layer.fields()
             self.feature = QgsFeature(fields)
             for idx in range(self.layer.fields().count()):
-                self.feature.setAttribute(idx, layer.defaultValue(idx))
+                self.feature.setAttribute(idx, self.layer.defaultValue(idx))
             self.feature.setValid(True)
             self.attributeForm.setFeature(self.feature)
             self.attributeForm.attributeChanged.connect(
@@ -89,3 +101,10 @@ class AttributesDock(QgsDockWidget):
         self.layer.setDefaultValueExpression(
             idx, QgsExpression.quotedValue(value))
         self.layer.blockSignals(False)
+
+    def onProjectRead(self, doc):
+        title, isDefined = QgsProject.instance().readEntry('quick_attribution', 'layercbxtitle')
+        if isDefined:
+            self.layerTitleLabel.setText(title)
+        else:
+            self.layerTitleLabel.setText(self.tr('Layer'))
