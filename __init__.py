@@ -11,7 +11,7 @@
 #---------------------------------------------------------------------
 
 from qgis.PyQt.QtCore import Qt
-from AttributesDock import AttributesDock
+from .AttributesDock import AttributesDock
 # from MapLayerProperties import QuickAttributionLayerProperties
 
 
@@ -19,7 +19,7 @@ def classFactory(iface):
     return QuickAttribution(iface)
 
 
-class QuickAttribution:
+class QuickAttribution(object):
 
     def __init__(self, iface):
         self.iface = iface

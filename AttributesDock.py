@@ -14,21 +14,20 @@ from qgis.gui import (
     QgsDockWidget,
     QgsAttributeForm,
     QgsMapLayerComboBox,
-    QgsMapLayerProxyModel,
     QgsAttributeEditorContext
 )
 from qgis.core import (
     QgsExpression,
     QgsMapLayer,
-    QgsMapLayerRegistry,
     QgsFeature,
+    QgsMapLayerProxyModel,
     QgsProject
 )
 from qgis.PyQt.QtWidgets import (
     QWidget,
     QLabel
 )
-from qgis.PyQt.QtGui import QGridLayout
+from qgis.PyQt.QtWidgets import QGridLayout
 from qgis.PyQt.QtCore import pyqtSignal
 
 class AttributesDock(QgsDockWidget):
