@@ -39,13 +39,16 @@ class AttributesDock(QgsDockWidget):
         self.iface = iface
         self.widget = QWidget()
         self.widget.setLayout(QGridLayout())
+        self.widget.setContentsMargins(0, 0, 0, 0)
         self.layerComboBox = QgsMapLayerComboBox()
         self.layerComboBox.layerChanged.connect(self.setLayer)
+        self.layerComboBox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.layerTitleLabel = QLabel()
         self.widget.layout().addWidget(self.layerTitleLabel, 0, 0, 1, 1)
         self.widget.layout().addWidget(self.layerComboBox, 0, 1, 1, 1)
         self.formWidget = QWidget()
         self.formWidget.setLayout(QGridLayout())
+        self.formWidget.setContentsMargins(0, 0, 0, 0)
         self.widget.layout().addWidget(self.formWidget, 1, 0, 1, 2)
         self.setWidget(self.widget)
         self.attributeForm = None
