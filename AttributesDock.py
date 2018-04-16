@@ -25,9 +25,10 @@ from qgis.core import (
 )
 from qgis.PyQt.QtWidgets import (
     QWidget,
-    QLabel
+    QLabel,
+    QGridLayout,
+    QSizePolicy
 )
-from qgis.PyQt.QtWidgets import QGridLayout
 from qgis.PyQt.QtCore import pyqtSignal
 
 class AttributesDock(QgsDockWidget):
