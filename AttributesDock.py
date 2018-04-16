@@ -74,7 +74,7 @@ class AttributesDock(QgsDockWidget):
             except RuntimeError:
                 # Sometimes the form has already been deleted, that's ok for us
                 pass
-        if self.layer:
+        if self.layer is not None:
             context = QgsAttributeEditorContext()
             context.setVectorLayerTools(self.iface.vectorLayerTools())
             context.setFormMode(QgsAttributeEditorContext.StandaloneDialog)
