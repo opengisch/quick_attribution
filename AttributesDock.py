@@ -54,6 +54,7 @@ class AttributesDock(QgsDockWidget):
         self.setWidget(self.widget)
         self.attributeForm = None
         self.layer = None
+        self.feature = None
 
         self.layerComboBox.setFilters(
             QgsMapLayerProxyModel.WritableLayer | QgsMapLayerProxyModel.VectorLayer)
