@@ -21,7 +21,8 @@ from qgis.core import (
     QgsMapLayer,
     QgsFeature,
     QgsMapLayerProxyModel,
-    QgsProject
+    QgsProject,
+    QgsDefaultValue
 )
 from qgis.PyQt.QtWidgets import (
     QWidget,
@@ -104,10 +105,10 @@ class AttributesDock(QgsDockWidget):
         self.setLayer(None)
 
     def onAttributeChanged(self, attributeName, value):
-        idx = self.layer.fieldNameIndex(attributeName)
+        idx = self.layer.fields().indexOf(attributeName)
         self.layer.blockSignals(True)
-        self.layer.setDefaultValueExpression(
-            idx, QgsExpression.quotedValue(value))
+        self.layer.setDefaultValueDefinition(
+            idx, QgsDefaultValue(QgsExpression.quotedValue(value)))
         self.layer.blockSignals(False)
 
     def onProjectRead(self, doc):
