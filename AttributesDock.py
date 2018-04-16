@@ -63,7 +63,11 @@ class AttributesDock(QgsDockWidget):
         if layer == self.layer:
             return
         if self.layer:
-            self.layer.destroyed.disconnect(self.onLayerRemoved)
+            try:
+                self.layer.destroyed.disconnect(self.onLayerRemoved)
+            except TypeError:
+                # Do not care if it is not connected
+                pass
         self.layer = layer
         if self.layer:
             self.layer.destroyed.connect(self.onLayerRemoved)
