@@ -22,7 +22,8 @@ from qgis.core import (
     QgsFeature,
     QgsMapLayerProxyModel,
     QgsProject,
-    QgsDefaultValue
+    QgsDefaultValue,
+    QCoreApplication
 )
 from qgis.PyQt.QtWidgets import (
     QWidget,
@@ -36,7 +37,7 @@ class AttributesDock(QgsDockWidget):
     layerChanged = pyqtSignal(QgsMapLayer)
 
     def __init__(self, iface):
-        QgsDockWidget.__init__(self)
+        QgsDockWidget.__init__(self, QCoreApplication.translate('AttributesDock', 'Quick Attribution'))
         self.iface = iface
         self.widget = QWidget()
         self.widget.setLayout(QGridLayout())
