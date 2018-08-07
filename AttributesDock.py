@@ -22,8 +22,7 @@ from qgis.core import (
     QgsFeature,
     QgsMapLayerProxyModel,
     QgsProject,
-    QgsDefaultValue,
-    QCoreApplication
+    QgsDefaultValue
 )
 from qgis.PyQt.QtWidgets import (
     QWidget,
@@ -31,7 +30,10 @@ from qgis.PyQt.QtWidgets import (
     QGridLayout,
     QSizePolicy
 )
-from qgis.PyQt.QtCore import pyqtSignal
+from qgis.PyQt.QtCore import(
+    pyqtSignal,
+    QCoreApplication
+)
 
 class AttributesDock(QgsDockWidget):
     layerChanged = pyqtSignal(QgsMapLayer)
