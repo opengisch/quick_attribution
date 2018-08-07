@@ -3,11 +3,6 @@ language: python
 python:
   - 3.5
 
-addons:
-  apt:
-    packages:
-      - pyqt5-dev-tools
-
 git:
   submodules: false
 
@@ -17,5 +12,19 @@ before_install:
 install:
   - pip install -r requirements.txt
 
-script:
-  - scripts/ci/deploy.sh
+jobs:
+  include:
+
+# Deploy on tag
+    - stage: deploy
+      if: tag is present
+      script: plugin_ci/release/release.sh
+
+# Push translation to transifex
+#    - stage: deploy
+#      if branch = master
+#      addons:
+#        apt:
+#          packages:
+#            - pyqt5-dev-tools
+#      script: scripts/ci/update-translations.sh
