@@ -32,11 +32,13 @@ from qgis.PyQt.QtWidgets import (
 )
 from qgis.PyQt.QtCore import(
     pyqtSignal,
-    QCoreApplication
+    QCoreApplication,
+    QVariant
 )
 
 class AttributesDock(QgsDockWidget):
     layerChanged = pyqtSignal(QgsMapLayer)
+    currentValueChanged = pyqtSignal(str, QVariant)
 
     def __init__(self, iface):
         QgsDockWidget.__init__(self, QCoreApplication.translate('AttributesDock', 'Quick Attribution'))
@@ -114,6 +116,7 @@ class AttributesDock(QgsDockWidget):
         self.layer.setDefaultValueDefinition(
             idx, QgsDefaultValue(QgsExpression.quotedValue(value)))
         self.layer.blockSignals(False)
+        self.currentValueChanged.emit(attributeName, value)
 
     def onProjectRead(self, doc):
         title, isDefined = QgsProject.instance().readEntry('quick_attribution', 'layercbxtitle')
