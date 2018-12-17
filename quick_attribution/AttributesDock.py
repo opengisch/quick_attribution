@@ -22,7 +22,8 @@ from qgis.core import (
     QgsFeature,
     QgsMapLayerProxyModel,
     QgsProject,
-    QgsDefaultValue
+    QgsDefaultValue,
+    NULL
 )
 from qgis.PyQt.QtWidgets import (
     QWidget,
@@ -102,7 +103,7 @@ class AttributesDock(QgsDockWidget):
                 self.feature.setAttribute(idx, self.layer.defaultValue(idx))
             self.feature.setValid(True)
             self.attributeForm.setFeature(self.feature)
-            self.attributeForm.attributeChanged.connect(
+            self.attributeForm.widgetValueChanged.connect(
                 self.onAttributeChanged)
             self.formWidget.layout().addWidget(self.attributeForm)
             self.layerChanged.emit(self.layer)
@@ -110,11 +111,15 @@ class AttributesDock(QgsDockWidget):
     def onLayerRemoved(self):
         self.setLayer(None)
 
-    def onAttributeChanged(self, attributeName, value):
+    def onAttributeChanged(self, attributeName, value, changed):
         idx = self.layer.fields().indexOf(attributeName)
+        if value != 'NULL':
+            defaultValue = QgsExpression.quotedValue(value)
+        else:
+            defaultValue = 'NULL'
         self.layer.blockSignals(True)
         self.layer.setDefaultValueDefinition(
-            idx, QgsDefaultValue(QgsExpression.quotedValue(value)))
+            idx, QgsDefaultValue(defaultValue))
         self.layer.blockSignals(False)
         self.currentValueChanged.emit(attributeName, value)
 
